@@ -29,8 +29,14 @@ export default class SassCompiler extends CompilerBase {
     return mimeTypes;
   }
 
+  static isSassPartial(fileName) {
+    const basename = path.basename(fileName);
+    const ext = path.extname(fileName);
+    return ext==='.scss' && basename[0]==='_';
+  }
+
   async shouldCompileFile(fileName, compilerContext) { // eslint-disable-line no-unused-vars
-    return true;
+    return !SassCompiler.isSassPartial(fileName);
   }
 
   async determineDependentFiles(sourceCode, filePath, compilerContext) {
@@ -87,7 +93,7 @@ export default class SassCompiler extends CompilerBase {
   }
 
   shouldCompileFileSync(fileName, compilerContext) { // eslint-disable-line no-unused-vars
-    return true;
+    return !SassCompiler.isSassPartial(fileName);
   }
 
   determineDependentFilesSync(sourceCode, filePath, compilerContext) { // eslint-disable-line no-unused-vars
